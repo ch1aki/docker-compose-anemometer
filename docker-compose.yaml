@@ -1,0 +1,27 @@
+version: "3"
+services:
+  anemometer:
+    image: boxinc/anemometer
+    environment:
+      ANEMOMETER_MYSQL_HOST: "${ANEMOMETER_MYSQL_HOST}"
+      ANEMOMETER_MYSQL_PORT: "${ANEMOMETER_MYSQL_PORT}"
+      ANEMOMETER_MYSQL_USER: "${ANEMOMETER_MYSQL_USER}"
+      ANEMOMETER_MYSQL_PASSWORD: "${ANEMOMETER_MYSQL_PASSWORD}"
+      ANEMOMETER_MYSQL_DB: "${ANEMOMETER_MYSQL_DB}"
+    volumes:
+      - ./config.inc.php:/var/www/html/conf/config.inc.php
+    ports:
+      - "10080:80"
+    depends_on:
+      - mysql56
+  mysql56:
+    image: mysql:5.6
+    environment:
+      MYSQL_DATABASE: "${ANEMOMETER_MYSQL_DB}"
+      MYSQL_USER: "${ANEMOMETER_MYSQL_USER}"
+      MYSQL_PASSWORD: "${ANEMOMETER_MYSQL_PASSWORD}"
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+  pt:
+    image: yoku0825/percona-toolkit
